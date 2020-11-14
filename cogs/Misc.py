@@ -66,7 +66,7 @@ class miscellaneous(commands.Cog):
   async def av(self, ctx, user: discord.Member=None):
     """ Get user profile picture """
     user = user or ctx.author
-    em = discord.Embed(Title=f"{user.name}'s avatar")
+    em = discord.Embed(title=f"{user.name}'s avatar")
     em.set_image(url=user.avatar_url)
     await ctx.send(embed=em)
 
