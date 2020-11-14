@@ -3,8 +3,6 @@ from discord.ext import commands
 import time
 import typing
 import json
-import requests
-import shutil
 
 client = commands
 
@@ -39,6 +37,7 @@ class moderation(commands.Cog):
     await ctx.send(f'Kicked {member.mention}')
 
   @commands.command(description="Unban's a user from the server", usage="{user id|username#user discriminator}")
+  @commands.guild_only()
   @commands.has_permissions(ban_members=True)
   async def unban(self, ctx, *, member):
     try:
@@ -58,6 +57,7 @@ class moderation(commands.Cog):
       await ctx.send(f"Unbanned {member.name}")
 
   @client.command(aliases=['clear'], description="Mass delete messages", usage="{limit/amount}")
+  @commands.guild_only()
   @commands.has_guild_permissions(manage_messages=True)
   async def purge(self, ctx, amount = 1):
     """ Mass delete messages """
