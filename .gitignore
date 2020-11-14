@@ -5,3 +5,4 @@ img.png
 prefixes.json
 .env
 logs
+spring.log
