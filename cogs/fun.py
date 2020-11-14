@@ -2,11 +2,12 @@ import discord
 from discord.ext import commands
 import random
 import praw
+import os
 
 reddit = praw.Reddit(client_id='c_85u5DZ793OFQ',
-                     client_secret='iBBJIhWmv6uB3E6R7UNlgC7t8Go',
+                     client_secret=os.getenv('client_secret'),
                      username = "Electronbot123",
-                     password = "Electronbot123",
+                     password = os.getenv('reddit_password'),
                      user_agent = "Memes")
 
 client = commands
