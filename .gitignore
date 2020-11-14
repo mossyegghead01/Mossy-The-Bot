@@ -4,3 +4,4 @@ keep_alive.py
 img.png
 prefixes.json
 .env
+logs
