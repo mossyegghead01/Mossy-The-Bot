@@ -7,13 +7,13 @@ class help(commands.Cog):
     self.client = client
   
   @commands.command()
+  @commands.guild_only()
   async def help(self, ctx):
     with open("prefixes.json", "r") as f:
       prefixes = json.load(f)
     pre = prefixes[str(ctx.guild.id)]
-    chnl = ctx.author.create_dm()
-    em = discord.Embed(title="Bot help", description=f"My prefix for {ctx.guild.name} is {pre}\n[Commands list](https://Mossy-The-Bot-Rewrite.mossyegghead01.repl.co/commands)\n[Support Server](http://discord.gg/McE8rU9)\n[Add me to your server](https://discord.com/api/oauth2/authorize?client_id=738423643314323558&permissions=3402838&scope=bot)", color = discord.color.red())
-    await chnl.send(embed=em)
+    em = discord.Embed(title="Bot help", description=f"My prefix for {ctx.guild.name} is ``{pre}``\n[Commands list](https://Mossy-The-Bot.mossyegghead01.repl.co/commands)\n[Support Server](http://discord.gg/McE8rU9)\n[Add me to your server](https://discord.com/api/oauth2/authorize?client_id=738423643314323558&permissions=3402838&scope=bot)", color = discord.Color.red())
+    await ctx.author.send(embed=em)
     await ctx.send(f"{ctx.author.mention} Check your DM.")
 
 def setup(client):
