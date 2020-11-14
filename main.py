@@ -17,9 +17,19 @@ subprocess.Popen(['java', '-jar', 'Lavalink.jar'])
 time.sleep(60)
 
 def get_prefix(client, message):
+  try:
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+  except:
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
+    prefixes[str(message.guild.id)] = '!'
+
+
+    with open('prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent=4)
+  finally:
     return prefixes[str(message.guild.id)]
 
 intents = discord.Intents.all()
@@ -127,15 +137,12 @@ async def before_clog():
 
 @client.event
 async def on_message(msg):
-  try:
     if match("<@!738423643314323558>", msg.content) is not None:
-      with open("prefixes.json", "r") as f:
-        prefixes = json.load(f)
-      pre = prefixes[str(msg.guild.id)] 
-      await msg.channel.send(f"My prefix for this server is ``{pre}``")
-  except:
-    pass
-  await client.process_commands(msg)
+        with open("prefixes.json", "r") as f:
+          prefixes = json.load(f)
+        pre = prefixes[str(msg.guild.id)] 
+        await msg.channel.send(f"My prefix for this server is ``{pre}``")
+    await client.process_commands(msg)
 
 clog.start()
 keep_alive.keep_alive()
