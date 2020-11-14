@@ -21,9 +21,8 @@ class moderation(commands.Cog):
   @commands.has_guild_permissions(ban_members=True)
   async def ban(self, ctx, member : discord.Member, *, reason=None):
     """ Ban a user """
-    channel = await member.create_dm()
     guild = ctx.guild.name
-    await channel.send(f'You are banned from {guild} because: {reason}')
+    await member.send(f'You are banned from {guild} because: {reason}')
     time.sleep(1)
     await member.ban(reason=reason)
     await ctx.send(f'Banned {member.mention}')
@@ -33,9 +32,8 @@ class moderation(commands.Cog):
   @commands.has_guild_permissions(kick_members=True)
   async def kick(self, ctx, member : discord.Member, *, reason=None):
     """ Kick a user """
-    channel = await member.create_dm()
     guild = ctx.guild.name
-    await channel.send(f'You are kicked from {guild} because: {reason}')
+    await member.send(f'You are kicked from {guild} because: {reason}')
     time.sleep(1)
     await member.kick(reason=reason)
     await ctx.send(f'Kicked {member.mention}')
@@ -65,9 +63,7 @@ class moderation(commands.Cog):
     """ Mass delete messages """
     await ctx.message.delete()
     await ctx.channel.purge(limit=amount)
-    msg = await ctx.send(f"Purged {amount} message(s)")
-    time.sleep(2)
-    await msg.delete()
+    await ctx.send(f"Purged {amount} message(s)", delete_after=2)
 
   @client.command(description="Hate the bot? run this command to make the bot leave easly", usage="")
   @commands.guild_only()

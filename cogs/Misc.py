@@ -65,10 +65,10 @@ class miscellaneous(commands.Cog):
   @client.command(description="Get user profile picture", usage="(user)")
   async def av(self, ctx, user: discord.Member=None):
     """ Get user profile picture """
-    if user is None:
-      await ctx.send(ctx.author.avatar_url)
-    else:
-      await ctx.send(user.avatar_url)
+    user = user or ctx.author
+    em = discord.Embed(Title=f"{user.name}'s avatar")
+    em.set_image(url=user.avatar_url)
+    await ctx.send(embed=em)
 
   @client.command(description="View bot statistic", usage="")
   async def botinfo(self, ctx):
