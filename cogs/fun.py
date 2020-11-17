@@ -10,13 +10,11 @@ reddit = praw.Reddit(client_id='c_85u5DZ793OFQ',
                      password = os.getenv('reddit_password'),
                      user_agent = "Memes")
 
-client = commands
-
 class fun(commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  @client.command(pass_context = True, aliases=["8ball"], description="8Ball game. It will say ethier yes or no", usage="{question}")
+  @commands.command(pass_context = True, aliases=["8ball"], description="8Ball game. It will say ethier yes or no", usage="{question}")
   async def ball(self, ctx, *,question):
     """ 8Ball game. It will say ethier yes or no  """
     idk = random.randint(1, 2)
@@ -27,7 +25,7 @@ class fun(commands.Cog):
     em = discord.Embed(title=question, description=answer)
     await ctx.send(embed=em)
 
-  @client.command(description="Play Rock Paper Scissors with bot. Invalid choice considered as lose by the bot", usage="{Rock|Paper|Scissors}")
+  @commands.command(description="Play Rock Paper Scissors with bot. Invalid choice considered as lose by the bot", usage="{Rock|Paper|Scissors}")
   async def rps(self, ctx, choice):
     """ Play Rock Paper Scissors with bot. """
     bot_choice_list = ["Rock", "Paper", "Scissors"]
@@ -49,7 +47,7 @@ class fun(commands.Cog):
     else:
       await ctx.send("Your choice isn't valid!")
   
-  @client.command(aliases=['meme'], description="Get a reddit meme", usage="")
+  @commands.command(aliases=['meme'], description="Get a reddit meme", usage="")
   async def memes(self, ctx):
         subreddit = reddit.subreddit("memes")
         all_subs = []

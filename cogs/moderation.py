@@ -4,17 +4,11 @@ import time
 import typing
 import json
 
-client = commands
-
 class moderation(commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  @client.Cog.listener()
-  async def on_ready(self):
-    print("Mod Cog Ready")
-
-  @client.command(description="Ban a user", usage="{user} (resaon)") #<-- ban command
+  @commands.command(description="Ban a user", usage="{user} (resaon)") #<-- ban command
   @commands.guild_only()
   @commands.has_guild_permissions(ban_members=True)
   async def ban(self, ctx, member : discord.Member, *, reason=None):
@@ -25,7 +19,7 @@ class moderation(commands.Cog):
     await member.ban(reason=reason)
     await ctx.send(f'Banned {member.mention}')
 
-  @client.command(description="Kick a user", usage="{user} (resaon)")
+  @commands.command(description="Kick a user", usage="{user} (resaon)")
   @commands.guild_only()
   @commands.has_guild_permissions(kick_members=True)
   async def kick(self, ctx, member : discord.Member, *, reason=None):
@@ -56,7 +50,7 @@ class moderation(commands.Cog):
       await ctx.guild.unban(member)
       await ctx.send(f"Unbanned {member.name}")
 
-  @client.command(aliases=['clear'], description="Mass delete messages", usage="{limit/amount}")
+  @commands.command(aliases=['clear'], description="Mass delete messages", usage="{limit/amount}")
   @commands.guild_only()
   @commands.has_guild_permissions(manage_messages=True)
   async def purge(self, ctx, amount = 1):
@@ -65,7 +59,7 @@ class moderation(commands.Cog):
     await ctx.channel.purge(limit=amount)
     await ctx.send(f"Purged {amount} message(s)", delete_after=2)
 
-  @client.command(description="Hate the bot? run this command to make the bot leave easly", usage="")
+  @commands.command(description="Hate the bot? run this command to make the bot leave easly", usage="")
   @commands.guild_only()
   @commands.has_guild_permissions(kick_members=True)
   async def kickbot(self, ctx):
@@ -74,7 +68,7 @@ class moderation(commands.Cog):
     time.sleep(1)
     await ctx.guild.leave()
 
-  @client.command(aliases=['slow'], description="Set the channel message cooldown", usage="(channel) {delay}")
+  @commands.command(aliases=['slow'], description="Set the channel message cooldown", usage="(channel) {delay}")
   @commands.guild_only()
   @commands.has_guild_permissions(manage_channels=True)
   async def slowmode(self, ctx, channel: typing.Optional[discord.TextChannel]=None, seconds: int = 0):
@@ -90,7 +84,7 @@ class moderation(commands.Cog):
       else:
         await ctx.send("You cant do this! You don't have manage channel permission in that channel!")
 
-  @client.command(description="Change server bot prefix", usage="{prefix}")
+  @commands.command(description="Change server bot prefix", usage="{prefix}")
   @commands.guild_only()
   @commands.has_guild_permissions(manage_guild=True)
   async def prefix(self, ctx, prefix):
