@@ -1,21 +1,14 @@
 import discord
 from discord.ext import commands
-import time
 import sys
 import typing
-
-client = commands
 
 class miscellaneous(commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  @client.Cog.listener()
-  async def on_ready(self):
-    print("Misc Cog Ready")
-
-  @client.command(description="Make a poll", usage="{poll Question}")
-  @commands.has_guild_permissions(manage_messages=True)
+  @commands.command(description="Make a poll", usage="{poll Question}")
+  @commands.has_permissions(manage_messages=True)
   async def poll(self, ctx, *args):
     """ Make a poll """
     mesg = ' '.join(args)
@@ -26,29 +19,30 @@ class miscellaneous(commands.Cog):
     await message.add_reaction(str('✅'))
     await message.add_reaction(str('❌'))
 
-  @client.command(description="Repeats after you", usage="{Message}")
-  @commands.has_guild_permissions(manage_messages=True)
+  @commands.command(description="Repeats after you", usage="{Message}")
+  @commands.has_permissions(manage_messages=True)
   async def say(self, ctx, *, msg):
     """ Make the bot say something """
     await ctx.message.delete()
     await ctx.send("{}" .format(msg))
 
-  @client.command(description="Repeats after you but in an embed", usage="{Message}")
+  @commands.command(description="Repeats after you but in an embed", usage="{Message}")
+  @commands.has_permissions(manage_messages=True)
   async def embed(self, ctx, *, msg):
     """ Make the bot say something but in embed """
     embed = discord.Embed(description=msg, color=0xff0000)
     await ctx.message.delete()
     await ctx.send(embed=embed)
 
-  @client.command(pass_context=True, description="Get bot latency", usage="")
+  @commands.command(pass_context=True, description="Get bot latency", usage="")
   async def ping(self, ctx):
     """ Get bot latency. """
     message = await ctx.send("Pong!")
-    await message.edit(content=f"Pong!  ``{round(client.latency) * 1000}ms``")
+    await message.edit(content=f"Pong!  ``{round(self.client.latency) * 1000}ms``")
 
-  @client.command(description="An announcement command, similar to say command but can be used from other channel", usage="(channel) {message}")
+  @commands.command(description="An announcement command, similar to say command but can be used from other channel", usage="(channel) {message}")
   @commands.guild_only()
-  @commands.has_guild_permissions(manage_messages=True)
+  @commands.has_permissions(manage_messages=True)
   async def announce(self, ctx, channel:typing.Optional[discord.TextChannel]=None, *, message):
     """ An announcement command, similar to say command but can be used from other channel """
     if channel is None:
@@ -62,7 +56,7 @@ class miscellaneous(commands.Cog):
       await ctx.send("You cant send messages there")
     await ctx.message.delete()
 
-  @client.command(description="Get user profile picture", usage="(user)")
+  @commands.command(description="Get user profile picture", usage="(user)")
   async def av(self, ctx, user: discord.Member=None):
     """ Get user profile picture """
     user = user or ctx.author
@@ -70,21 +64,21 @@ class miscellaneous(commands.Cog):
     em.set_image(url=user.avatar_url)
     await ctx.send(embed=em)
 
-  @client.command(description="View bot statistic", usage="")
+  @commands.command(description="View bot statistic", usage="")
   async def botinfo(self, ctx):
     """ View bot statistic """
-    members = [member for member in client.get_all_members() if not member.bot]
-    info = await client.application_info()
+    members = [member for member in self.client.get_all_members() if not member.bot]
+    info = await self.client.application_info()
     embed=discord.Embed(title="Bot Information", description="Some Bot Informations", color=0xfd0006)
-    embed.set_thumbnail(url=client.user.avatar_url)
+    embed.set_thumbnail(url=self.client.user.avatar_url)
     embed.add_field(name="Python Version", value=sys.version.split()[0], inline=True)
     embed.add_field(name="Discord.py Version", value=discord.__version__, inline=True)
     embed.add_field(name="Author", value=info.owner, inline=True)
-    embed.add_field(name="Servers", value=len(client.guilds), inline=True)
+    embed.add_field(name="Servers", value=len(self.client.guilds), inline=True)
     embed.add_field(name="Users", value=len(members), inline=True)
     await ctx.send(embed=embed)
 
-  @client.command(description="Get a member info, you can also see your info too", usage="(user)")
+  @commands.command(description="Get a member info, you can also see your info too", usage="(user)")
   async def userinfo(self, ctx, member:discord.Member=None):
     """ Get a member info, you can also see your info too """
     if member is None:
