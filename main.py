@@ -12,6 +12,8 @@ import subprocess
 import time
 from tabulate import tabulate
 from re import match
+import praw
+import lavalink
 
 subprocess.Popen(['java', '-jar', 'Lavalink.jar'])
 time.sleep(60)
@@ -33,7 +35,7 @@ def get_prefix(client, message):
     return prefixes[str(message.guild.id)]
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix = get_prefix, intents=intents, case_insensitive=True, help_command=None)
+client = commands.AutoShardedBot(command_prefix = get_prefix, intents=intents, case_insensitive=True, help_command=None)
 
 @client.event
 async def on_ready():
@@ -43,6 +45,9 @@ async def on_ready():
     print(f'Running on python version {sys.version.split()[0]}')
     print(f'Running on discord.py version {discord.__version__}')
     print(f'Flask version {flask.__version__}')
+    print(f"Praw version {praw.__version__}")
+    print(f"Lavalink.py(translator for the actual lavalink)version {lavalink.__version__}")
+    print(f"Shard_ids={client.shard_ids}")
     for filename in os.listdir('./cogs'):
       if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
@@ -56,7 +61,6 @@ async def on_ready():
           c.append(f)
     m = tabulate(c, tablefmt='html')
     keep_alive.passcmd(m)
-    print(m)
 
 @client.event
 async def on_command_error(ctx, error):
@@ -88,6 +92,12 @@ async def on_guild_join(guild):
 
     with open('prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
+
+    for c in guild.text_channels:
+      if c.permissions_for(guild.me).send_messages:
+        em = discord.Embed(title ="Thank you for inviting me!", description="Thank you for inviting me to your server! My default prefix is !, you can change it by using !prefix {prefix}, add me via [this](https://discord.com/api/oauth2/authorize?client_id=738423643314323558&permissions=3402838&scope=bot) link. See all commands i have by using !help.", color=discord.Color.red())
+        await c.send(embed=em)
+        break
         
 @client.event
 async def on_guild_remove(guild):
