@@ -19,19 +19,8 @@ subprocess.Popen(['java', '-jar', 'Lavalink.jar'])
 time.sleep(60)
 
 def get_prefix(client, message):
-  try:
-    with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
-  except:
-    with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
-
-    prefixes[str(message.guild.id)] = '!'
-
-
-    with open('prefixes.json', 'w') as f:
-        json.dump(prefixes, f, indent=4)
-  finally:
+  with open('prefixes.json', 'r') as f:
+      prefixes = json.load(f)
     return prefixes[str(message.guild.id)]
 
 intents = discord.Intents.all()
@@ -56,7 +45,7 @@ async def on_ready():
     for z in client.cogs:
       m = client.get_cog(z)
       for i in m.get_commands():
-        if i.hidden == False and i.name != "help":
+        if i.hidden is False and i.name != "help":
           f = [i.name, i.description, f"!{i.name} {i.usage}", i.aliases]
           c.append(f)
     m = tabulate(c, tablefmt='html')
@@ -84,6 +73,11 @@ async def on_member_remove(member):
 
 @client.event
 async def on_guild_join(guild):
+    with open('welcomechannel.json', 'r') as m:
+      chnl = json.load(m)
+    chnl[str(guild.id)] = 'Not Set'
+    with open('welcomechannel.json', 'r') as m:
+      json.dump(chnl, m, indent=4)
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
@@ -101,6 +95,14 @@ async def on_guild_join(guild):
         
 @client.event
 async def on_guild_remove(guild):
+    with open('welcomechannel.json', 'r') as f:
+        chnl = json.load(f)
+
+    chnl.pop(str(guild.id))
+
+
+    with open('welcomechannel.json', 'w') as f:
+        json.dump(chnl, f, indent=4)
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
 

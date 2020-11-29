@@ -36,9 +36,8 @@ class miscellaneous(commands.Cog):
 
   @commands.command(pass_context=True, description="Get bot latency", usage="")
   async def ping(self, ctx):
-    """ Get bot latency. """
     message = await ctx.send("Pong!")
-    await message.edit(content=f"Pong!  ``{round(self.client.latency) * 1000}ms``")
+    await message.edit(content=f"Pong!  ``{round(self.client.latency * 1000)}ms``")
 
   @commands.command(description="An announcement command, similar to say command but can be used from other channel", usage="(channel) {message}")
   @commands.guild_only()
@@ -48,7 +47,7 @@ class miscellaneous(commands.Cog):
     if channel is None:
       channel = ctx.channel
     perm = ctx.author.permissions_in(channel)
-    if perm.send_messages == True:
+    if perm.send_messages is True:
       embed = discord.Embed(title='Announcement', description=message, color = 0xff0000)
       embed.set_footer(text=f'Announcement by {ctx.author.name}#{ctx.author.discriminator}')
       await channel.send(embed=embed)
