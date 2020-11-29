@@ -47,7 +47,7 @@ class miscellaneous(commands.Cog):
     if channel is None:
       channel = ctx.channel
     perm = ctx.author.permissions_in(channel)
-    if perm.send_messages == True:
+    if perm.send_messages is True:
       embed = discord.Embed(title='Announcement', description=message, color = 0xff0000)
       embed.set_footer(text=f'Announcement by {ctx.author.name}#{ctx.author.discriminator}')
       await channel.send(embed=embed)
